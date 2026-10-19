@@ -1,5 +1,6 @@
-from datetime import UTC, datetime
+from datetime import datetime
 from decimal import Decimal
+from typing import Any
 import uuid
 
 from sqlalchemy import (
@@ -36,7 +37,7 @@ class MonitoredProduct(Base):
     original_price: Mapped[Decimal | None] = mapped_column(Numeric(10, 2), nullable=True)
     discount_percentage: Mapped[int | None] = mapped_column(nullable=True)
     notify_on_sale_only: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    regional_prices: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    regional_prices: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
 
     # Estado Operacional
     in_stock: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)

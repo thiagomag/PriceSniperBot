@@ -14,8 +14,8 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.0.35",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "mypy>=1.11.0",
     "pytest>=8.3.0",
     "pytest-asyncio>=0.24.0",
@@ -26,3 +26,4 @@ dev-dependencies = [
 python_version = "3.12"
 strict = true
 ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
