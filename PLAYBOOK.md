@@ -53,7 +53,7 @@ Este documento detalha o plano de implementação tático derivado do `AGENTS.md
    - `original_price: Mapped[Decimal | None]` (`Numeric(10, 2)`, `nullable=True`)[cite: 2]
    - `discount_percentage: Mapped[int | None]` (`Integer`, `nullable=True`)[cite: 2]
    - `notify_on_sale_only: Mapped[bool]` (`Boolean`, `default=False`, `nullable=False`)[cite: 2]
-   - `extra_data: Mapped[dict | None]` (`JSONB`, `nullable=True`)
+   - `regional_prices: Mapped[dict | None]` (`JSONB`, `nullable=True`)
    - `in_stock: Mapped[bool]` (`Boolean`, `default=False`)[cite: 1]
    - `auto_buy: Mapped[bool]` (`Boolean`, `default=False`)[cite: 1]
    - `check_interval_sec: Mapped[int]` (`Integer`, `nullable=False`, `default=300`)[cite: 1]
@@ -132,9 +132,9 @@ Este documento detalha o plano de implementação tático derivado do `AGENTS.md
 
 ### Passo 3.3: Implementação de Extratores Híbridos e APIs Digitais (`src/scrapers/stores/`)
 1. **Lojas Digitais (Fast-Path via HTTP Puro com `curl_cffi`):**
-   - **Nintendo eShop:**
+   - **Nintendo eShop (Multi-Região):**
      - Extrair o `NSUID` numérico da URL do produto[cite: 2].
-     - Consultar concorrentemente (`asyncio.gather`) o endpoint de precificação para múltiplos países (`settings.ESHOP_COUNTRIES`): `https://api.ec.nintendo.com/v1/price?country={country}&lang=en&ids={NSUID}`[cite: 2].
+     - Consultar concorrentemente (`asyncio.gather`) o endpoint de precificação para múltiplos países configurados (`settings.ESHOP_COUNTRIES`): `https://api.ec.nintendo.com/v1/price?country={country}&lang=en&ids={NSUID}`[cite: 2].
      - Parsear `regular_price`, `discount_price` (com `end_datetime`) e calcular percentuais de desconto[cite: 2].
      - Popular o campo `regional_prices` mapeando moeda, preço original e valor promocional de cada país consultado.
      - Definir `execute_checkout()` como não suportado (`NotImplementedError`), restringindo a operação ao modelo Deal Sniping[cite: 2].
